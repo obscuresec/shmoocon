@@ -1,0 +1,137 @@
+Function Send-Phishing {
+<#
+.NAME
+   Send-Phishing
+
+.SYNOPSIS
+ 
+    Send-Phishing
+    
+    Author: Chris Campbell (@obscuresec)
+    License: BSD 3-Clause
+    
+.DESCRIPTION
+
+    This script can be used on authorized Social Engineering Campaigns.
+
+.PARAMETER $To
+
+    Specifies the to email address
+    
+.PARAMETER $From
+    
+    Specifies the from email address, should be in the same domain
+
+.PARAMETER $CC
+
+    Optionally specifies any carbon copied addresses
+
+.PARAMETER $BCC
+
+    Optionally specifies any blind carbon copied addresses
+
+.PARAMETER $Subject
+    
+    Specifies the subject of the email
+
+.PARAMETER $Body
+    
+    Specifies the body of the email
+
+.PARAMETER $SMTPServer
+
+    Specifies the email servers IP address or hostname
+
+.PARAMETER $SMTPPort
+    
+    Specifies the email servers port
+
+.PARAMETER $Timeout
+    
+    Specifies the connection timeout
+
+.PARAMETER $AttachmentPath
+    
+    Specifies the path to the optional attachment
+    
+.EXAMPLES 
+
+    PS C:\> Send-Phishing -To executive@company.lab -From payroll@company.lab -Subject "New Payroll Calendar" -Body "Recipients, `n You will find the new calendar attached. `n`n Payroll Administrator" -SMTPServer email.lab -AttachmentPath 'c:\demo\calendar.xls' 
+ 
+.LINK
+
+    https://github.com/obscuresec/shmoocon
+
+.NOTES
+
+    Adapted from script found in Windows PowerShell Cookbook (O'Reilly) by Lee Holmes
+
+    This type of activity may be blocked by host-based security products. 
+
+#>
+
+[CmdletBinding()] Param(
+        [Parameter(Mandatory = $True)] 
+        [ValidateNotNullOrEmpty()] 
+        [string] $To,
+        
+        [Parameter(Mandatory = $True)]  
+        [ValidateNotNullOrEmpty()]
+        [string] $From,
+        
+        [ValidateNotNullOrEmpty()] 
+        [string] $CC,
+        
+        [ValidateNotNullOrEmpty()]
+        [String] $BCC,
+        
+        [Parameter(Mandatory = $True)] 
+        [ValidateNotNullOrEmpty()] 
+        [String] $Subject,
+        
+        [Parameter(Mandatory = $True)] 
+        [ValidateNotNullOrEmpty()] 
+        [String] $Body,
+        
+        [Parameter(Mandatory = $True)] 
+        [ValidateNotNullOrEmpty()] 
+        [String] $SMTPServer,
+        
+        [Int32] $SMTPPort = 25,
+        
+        [Int32] $Timeout = 35000,
+        
+        [ValidateNotNullOrEmpty()] 
+        [ValidateScript({Test-Path -Path (Split-Path -Parent $_) -Pathtype Container })]
+        [String] $AttachmentPath
+        )
+
+    Try {
+        $MailObject = New-Object System.Net.Mail.MailMessage
+        $MailObject.To.Add($To)
+        $MailObject.From = $From
+        $MailObject.Body = $Body
+        $MailObject.Subject = $Subject
+
+            if ($CC) {
+                $MailObject.CC.Add($CC)
+            }
+
+            if ($BCC) {
+                $MailObject.BCC.Add($BCC)
+            }
+
+            if ($AttachmentPath) {
+                $AttachmentObject = New-Object System.Net.Mail.Attachment($Attachment, 'text/plain')
+                $MailObject.Attachments.Add($AttachmentPath)
+            }
+
+        $SMTPClientObject = New-Object System.Net.Mail.SmtpClient
+        $SMTPClientObject.Host = $SMTPServer
+        $SMTPClientObject.Port = $SMTPPort
+        $SMTPClientObject.UseDefaultCredentials = $False
+        $SMTPClientObject.Send($MailObject)
+    }
+
+    Catch {$Error[0]}
+}
