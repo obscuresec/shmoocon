@@ -772,8 +772,8 @@ public static extern IntPtr GetForegroundWindow();
         #Function to make sure that the script doesn't generate network traffic during off hours
         Function CheckWorkHours {
             #Check to see if its between work hours
-            $StartTimeCheck = (Get-Date -Format HH:%m) -ge (Get-Date $WorkStart)
-            $EndTimeCheck = (Get-Date -Format HH:%m) -le (Get-Date $WorkEnd)    
+            $StartTimeCheck = (Get-Date) -ge (Get-Date $WorkStart)
+            $EndTimeCheck = (Get-Date) -le (Get-Date $WorkEnd)    
                 if (($StartTimeCheck -eq $True) -and ($EndTimeCheck -eq $True)) {
                     Write-Verbose "It is during work hours. Continuing"
                 }
