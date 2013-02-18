@@ -1,0 +1,7 @@
+$IEComObject = New-Object -com "InternetExplorer.Application"
+$IEComObject.visible = $False
+$IEComObject.navigate('http://www.youtube.com/watch?v=v2AC41dglnM')
+$EndTime = (Get-Date).addminutes(1)
+do {$WscriptObject = New-Object -com wscript.shell
+$WscriptObject.SendKeys([char]175)}
+until ((Get-Date) -gt $EndTime)
